@@ -20,6 +20,22 @@ A modern, full-stack medical appointment scheduling web application designed for
 
 ---
 
+## 📸 Application Preview & Screenshots
+
+| 1. Homepage & Medical Specialties | 2. Doctor Directory & Profiles |
+| :---: | :---: |
+| ![Homepage Hero](docs/screenshots/01-homepage-hero.png) | ![Doctor Directory](docs/screenshots/02-doctor-directory.png) |
+
+| 3. Smart Slot Booking & Collision Check | 4. Patient Dashboard & My Bookings |
+| :---: | :---: |
+| ![Booking Modal](docs/screenshots/03-booking-modal.png) | ![My Bookings](docs/screenshots/04-my-bookings.png) |
+
+| 5. Patient Contact & PostgreSQL Inquiry Pipeline |
+| :---: |
+| ![Contact Page](docs/screenshots/05-contact-page.png) |
+
+---
+
 ## ✨ Key Features
 
 * **Real-Time Slot Collision Prevention:** Dynamic query validation prevents double-booking by fetching scheduled consultations in real-time and disabling occupied slots.
