@@ -6,28 +6,33 @@ const BASE_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL || 'http://localhost:13
 
 const axiosClient = axios.create({
     baseURL: `${BASE_URL}/api`,
-    headers: {
+    headers: API_KEY ? {
         'Authorization': `Bearer ${API_KEY}`
-    }
+    } : {}
 })
 
-  const getCategory=()=>axiosClient.get('categories?populate=*');
+// Public client for fetching doctors and categories (public endpoints that don't need a token)
+const publicClient = axios.create({
+    baseURL: `${BASE_URL}/api`
+})
 
-  const getDoctorList=()=>axiosClient.get('/doctors?populate=*')
-  
-  const getDoctorByCategory=(category)=>axiosClient.get('/doctors?filters[categories] [Name][$in]='+category+"&populate=*")
-  
-  const getDoctorById=(id)=>axiosClient.get('/doctors/'+id+"?populate=*")
+const getCategory = () => publicClient.get('/categories?populate=*');
 
-  const bookAppointment=(data)=>axiosClient.post('/appointments',data);
+const getDoctorList = () => publicClient.get('/doctors?populate=*');
 
-  const sendEmail=(data)=>axios.post('/api/sendEmail',data);
+const getDoctorByCategory = (category) => publicClient.get('/doctors?filters[categories][Name][$in]=' + encodeURIComponent(category) + "&populate=*");
 
-  const getUserBookingList=(userEmail)=>axiosClient.get("/appointments?[filters][Email][$eq]="+userEmail+"&populate[doctor][populate][image][populate][0]=url&populate=*")
+const getDoctorById = (id) => publicClient.get('/doctors/' + id + "?populate=*");
 
-  const deleteBooking=(id)=>axiosClient.delete('/appointments/'+id)
+const bookAppointment = (data) => axiosClient.post('/appointments', data);
 
-  const getBookedSlots=(doctorId, dateString)=>axiosClient.get(`/appointments?filters[doctor][id][$eq]=${doctorId}&filters[Date][$eq]=${dateString}`)
+const sendEmail = (data) => axios.post('/api/sendEmail', data);
+
+const getUserBookingList = (userEmail) => axiosClient.get("/appointments?[filters][Email][$eq]=" + userEmail + "&populate[doctor][populate][image][populate][0]=url&populate=*");
+
+const deleteBooking = (id) => axiosClient.delete('/appointments/' + id);
+
+const getBookedSlots = (doctorId, dateString) => axiosClient.get(`/appointments?filters[doctor][id][$eq]=${doctorId}&filters[Date][$eq]=${dateString}`);
   
   export default{
     getCategory,
