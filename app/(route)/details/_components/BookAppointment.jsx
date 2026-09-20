@@ -114,7 +114,8 @@ function BookAppointment({doctor}) {
                 checkBookedSlots();
             }
         }).catch(err => {
-            toast.error("Booking failed. Slot may already be taken.");
+            console.error("Booking error:", err);
+            toast.error(err?.response?.data?.error?.message || "Booking failed. Please try another slot or try again.");
         }).finally(() => {
             setIsSubmitting(false);
         });
