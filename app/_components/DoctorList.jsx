@@ -4,7 +4,7 @@ import React from 'react'
 
 function DoctorList({doctorList,heading='Popular Doctor'}) {
   return (
-    <div className='mb-10 px-8'>
+    <div id="explore-doctors" className='mb-10 px-8 scroll-mt-20'>
         <h2 className='font-bold text-xl'>
             {heading}</h2>
 
@@ -41,7 +41,7 @@ function DoctorList({doctorList,heading='Popular Doctor'}) {
         :
         // Skeleton Effect
         [0,1,2,3,4,5,6].map((item,index)=>(
-            <div className='h-[220px] bg-slate-200 w-full rounded-lg animate-pulse'>
+            <div key={index} className='h-[220px] bg-slate-200 w-full rounded-lg animate-pulse'>
 
             </div>
         ))

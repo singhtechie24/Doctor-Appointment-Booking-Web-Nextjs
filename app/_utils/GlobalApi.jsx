@@ -1,12 +1,13 @@
 const { default: axios } = require("axios")
 
 
-const API_KEY=process.env.NEXT_PUBLIC_STRAPI_API_KEY;
+const API_KEY = process.env.NEXT_PUBLIC_STRAPI_API_KEY;
+const BASE_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL || 'http://localhost:1337';
 
-const axiosClient=axios.create({
-    baseURL:'http://localhost:1337/api',
-    headers:{
-        'Authorization':`Bearer ${API_KEY}`
+const axiosClient = axios.create({
+    baseURL: `${BASE_URL}/api`,
+    headers: {
+        'Authorization': `Bearer ${API_KEY}`
     }
 })
 
@@ -25,6 +26,8 @@ const axiosClient=axios.create({
   const getUserBookingList=(userEmail)=>axiosClient.get("/appointments?[filters][Email][$eq]="+userEmail+"&populate[doctor][populate][image][populate][0]=url&populate=*")
 
   const deleteBooking=(id)=>axiosClient.delete('/appointments/'+id)
+
+  const getBookedSlots=(doctorId, dateString)=>axiosClient.get(`/appointments?filters[doctor][id][$eq]=${doctorId}&filters[Date][$eq]=${dateString}`)
   
   export default{
     getCategory,
@@ -34,5 +37,6 @@ const axiosClient=axios.create({
     bookAppointment,
     sendEmail,
     getUserBookingList,
-    deleteBooking
+    deleteBooking,
+    getBookedSlots
   }

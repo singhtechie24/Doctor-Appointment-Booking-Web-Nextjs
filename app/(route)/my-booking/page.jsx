@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import BookingList from './_components/BookingList'
 import GlobalApi from '@/app/_utils/GlobalApi'
 import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
+import moment from 'moment'
 
 function MyBooking() {
 
@@ -21,15 +22,23 @@ function MyBooking() {
 
     /**
      * Used to Filter User Booking
-     * @param {} type 
-     * @returns 
+     * Compares both Date and Time so today's future appointments are properly marked 'Upcoming'
+     * @param {string} type - 'upcoming' | 'expired'
+     * @returns {Array}
      */
     const filterUserBooking=(type)=>{
-        const result=bookingList.filter(item=>
-           type=='upcoming'? new Date(item.attributes.Date)>=new Date()
-           :new Date(item.attributes.Date)<=new Date()
-            )
-            console.log(result)
+        const result = bookingList.filter(item => {
+            const dateStr = item.attributes.Date;
+            const timeStr = item.attributes.Time;
+
+            // Combine date and time to compare against now
+            const appointmentDateTime = timeStr 
+                ? moment(`${dateStr} ${timeStr}`, ['YYYY-MM-DD hh:mm A', 'YYYY-MM-DD h:mm A', 'YYYY-MM-DD'])
+                : moment(dateStr).endOf('day');
+
+            const isUpcoming = appointmentDateTime.isSameOrAfter(moment());
+            return type === 'upcoming' ? isUpcoming : !isUpcoming;
+        });
         return result;
     }
   return (

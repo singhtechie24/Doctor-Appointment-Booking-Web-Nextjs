@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 function Hero() {
@@ -30,7 +31,9 @@ function Hero() {
           Find us in your neighborhood for top-notch dental services.
           </p>
   
-         <Button className="mt-10">Explore Now</Button>
+          <Link href="/#explore-doctors">
+            <Button className="mt-10">Explore Now</Button>
+          </Link>
         </div>
       </div>
     </div>

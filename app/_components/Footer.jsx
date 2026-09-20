@@ -11,34 +11,22 @@ function Footer() {
     height={100}
     />
 
-    <p className="mx-auto mt-6 max-w-md text-center leading-relaxed text-gray-500">
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Incidunt consequuntur amet culpa cum
-      itaque neque.
+    <p className="mx-auto mt-6 max-w-lg text-center leading-relaxed text-gray-500">
+      Welcome to Glowing Smiles Doctors. Dedicated to providing compassionate, top-tier dental and specialty medical care with seamless online appointment booking.
     </p>
 
-    <ul className="mt-12 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
+    <ul className="mt-10 flex flex-wrap justify-center gap-6 md:gap-8 lg:gap-12">
       <li>
-        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> About </a>
+        <a className="text-gray-700 transition hover:text-primary font-medium" href="/"> Home </a>
       </li>
-
       <li>
-        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Careers </a>
+        <a className="text-gray-700 transition hover:text-primary font-medium" href="/#explore-doctors"> Explore Doctors </a>
       </li>
-
       <li>
-        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> History </a>
+        <a className="text-gray-700 transition hover:text-primary font-medium" href="/my-booking"> My Bookings </a>
       </li>
-
       <li>
-        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Services </a>
-      </li>
-
-      <li>
-        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Projects </a>
-      </li>
-
-      <li>
-        <a className="text-gray-700 transition hover:text-gray-700/75" href="#"> Blog </a>
+        <a className="text-gray-700 transition hover:text-primary font-medium" href="/contact"> Contact Us </a>
       </li>
     </ul>
 

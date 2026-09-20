@@ -21,12 +21,12 @@ function Header() {
         {
             id:2,
             name:'Explore',
-            path:'/'
+            path:'/#explore-doctors'
         },
         {
             id:3,
             name:'Contact Us',
-            path:'/'
+            path:'/contact'
         },
     ]
 

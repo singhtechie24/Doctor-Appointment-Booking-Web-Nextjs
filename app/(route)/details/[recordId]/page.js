@@ -5,14 +5,14 @@ import DoctorDetails from '../_components/DoctorDetails';
 import DoctorSuggestionList from '../_components/DoctorSuggestionList';
 
 function Details({params}) {
-  
+  const resolvedParams = React.use(params);
   const [doctor,setDoctor]=useState();
   useEffect(()=>{
     getDoctorByID();
-  },[])
+  },[resolvedParams?.recordId])
   const getDoctorByID=()=>{
-    GlobalApi.getDoctorById(params.recordId).then(resp=>{
-      
+    if (!resolvedParams?.recordId) return;
+    GlobalApi.getDoctorById(resolvedParams.recordId).then(resp=>{
       setDoctor(resp.data.data);
     })
   }
