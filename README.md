@@ -15,7 +15,6 @@ A modern, full-stack medical appointment scheduling web application designed for
 ## 🌐 Live Demos
 
 * **Live Web Application:** [https://doctor-appointment-booking-web-nextjs-two.vercel.app](https://doctor-appointment-booking-web-nextjs-two.vercel.app)
-* **Backend API (Strapi CMS):** [https://doctor-appointment-admin-strapi-0459.onrender.com](https://doctor-appointment-admin-strapi-0459.onrender.com)
 * **Backend Repository:** [Doctor-Appointment-Admin-Strapi](https://github.com/singhtechie24/doctor-appointment-admin-strapi)
 
 ---
