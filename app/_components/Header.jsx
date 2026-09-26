@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { LoginLink, LogoutLink, useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
     Popover,
     PopoverContent,
@@ -31,10 +31,6 @@ function Header() {
     ]
 
     const {user} = useKindeBrowserClient();
-
-    useEffect(()=>{
-       console.log(user);
-    },[user])
   return (
     <div className='flex items-center
      justify-between p-4 shadow-sm'>

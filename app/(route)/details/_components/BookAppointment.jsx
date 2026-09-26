@@ -17,6 +17,7 @@ import { useKindeBrowserClient } from '@kinde-oss/kinde-auth-nextjs'
 import GlobalApi from '@/app/_utils/GlobalApi'
 import { toast } from 'sonner'
 import moment from 'moment'
+import { getTimeSlots } from '@/lib/timeSlots.mjs'
 
 function BookAppointment({doctor}) {
     const [date, setDate] = useState(new Date());
@@ -39,26 +40,14 @@ function BookAppointment({doctor}) {
     }, [date, doctor])
 
     const getTime = () => {
-        const timeList = [];
-        for (let i = 10; i <= 12; i++) {
-            timeList.push({ time: i + ':00 AM' })
-            timeList.push({ time: i + ':30 AM' })
-        }
-
-        for (let i = 1; i <= 6; i++) {
-            timeList.push({ time: i + ':00 PM' })
-            timeList.push({ time: i + ':30 PM' })
-        }
-
-        setTimeSlot(timeList)
+        setTimeSlot(getTimeSlots().map(time => ({ time })))
     }
 
     // Fetch slots that are already booked for this doctor on the selected date
     const checkBookedSlots = () => {
         const formattedDate = moment(date).format('YYYY-MM-DD');
         GlobalApi.getBookedSlots(doctor.id, formattedDate).then(resp => {
-            const bookings = resp.data.data || [];
-            const occupied = bookings.map(b => b.attributes?.Time);
+            const occupied = resp.data.times || [];
             setBookedSlots(occupied);
             // If user's selected slot is already booked, reset selection
             if (occupied.includes(selectedTimeSLot)) {
@@ -93,20 +82,27 @@ function BookAppointment({doctor}) {
         setIsSubmitting(true);
         const formattedDate = moment(date).format('YYYY-MM-DD');
 
-        const data = {
-            data: {
-               UserName: (user.given_name || '') + " " + (user.family_name || ''),
-               Email: user.email,
-               Time: selectedTimeSLot,
-               Date: formattedDate,
-               doctor: doctor.id,
-               Note: note
-            }
+        // Patient identity is taken from the Kinde session on the server
+        const booking = {
+            doctorId: doctor.id,
+            date: formattedDate,
+            time: selectedTimeSLot,
+            note: note
         }
 
-        GlobalApi.bookAppointment(data).then(resp => {
+        GlobalApi.bookAppointment(booking).then(resp => {
             if (resp) {
-                GlobalApi.sendEmail(data).catch(e => console.error("Email send failed:", e));
+                const emailData = {
+                    data: {
+                        UserName: (user.given_name || '') + " " + (user.family_name || ''),
+                        Email: user.email,
+                        Time: selectedTimeSLot,
+                        Date: formattedDate,
+                        doctor: resp.data?.data?.doctorName || doctor?.attributes?.Name,
+                        Note: note
+                    }
+                }
+                GlobalApi.sendEmail(emailData).catch(e => console.error("Email send failed:", e));
                 toast.success("Appointment Booked! Confirmation sent to your email.");
                 setIsOpen(false);
                 setSelectedTimeslot(null);
@@ -115,7 +111,8 @@ function BookAppointment({doctor}) {
             }
         }).catch(err => {
             console.error("Booking error:", err);
-            toast.error(err?.response?.data?.error?.message || "Booking failed. Please try another slot or try again.");
+            toast.error(err?.response?.data?.error || "Booking failed. Please try another slot or try again.");
+            checkBookedSlots();
         }).finally(() => {
             setIsSubmitting(false);
         });

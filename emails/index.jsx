@@ -14,9 +14,11 @@ import {
   
   
   
-  const baseUrl = process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+  // Public site URL (server env). KINDE_SITE_URL is already set per deployment for Kinde redirects.
+  const baseUrl = (
+    process.env.KINDE_SITE_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000")
+  ).trim().replace(/\/$/, "");
   
   export const EmailTemplate = ({
     UserName,
@@ -42,10 +44,10 @@ import {
           />
           <Text style={paragraph}>Hi {UserName},</Text>
           <Text style={paragraph}>
-            Welcome to GlowingSmilesDoctor! Your appointment with doctor {doctor} has been booked {Date} {Time}.
+            Welcome to GlowingSmilesDoctor! Your appointment with {doctor} has been booked {Date} {Time}.
           </Text>
           <Section style={btnContainer}>
-            <Button style={button} href="http://localhost:3000/my-booking">
+            <Button style={button} href={`${baseUrl}/my-booking`}>
               Check Appointment
             </Button>
           </Section>

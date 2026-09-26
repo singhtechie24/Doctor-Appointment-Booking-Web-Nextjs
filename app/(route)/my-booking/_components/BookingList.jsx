@@ -10,14 +10,14 @@ import { toast } from 'sonner'
 function BookingList({bookingList,expired,updateRecord}) {
   
   const onDeleteBooking=(item)=>{
-   console.log(item)
    GlobalApi.deleteBooking(item.id).then(resp=>{
-    console.log(resp);
     if(resp)
     {
       toast('Booking Deleted Successfully!')
       updateRecord()
     }
+   }).catch(err=>{
+    toast.error(err?.response?.data?.error || 'Unable to cancel this appointment.')
    })
   }
   return (

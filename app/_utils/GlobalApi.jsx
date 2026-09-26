@@ -1,38 +1,34 @@
 const { default: axios } = require("axios")
 
 
-const API_KEY = process.env.NEXT_PUBLIC_STRAPI_API_KEY;
 const BASE_URL = process.env.NEXT_PUBLIC_STRAPI_BASE_URL || 'http://localhost:1337';
-
-const axiosClient = axios.create({
-    baseURL: `${BASE_URL}/api`,
-    headers: API_KEY ? {
-        'Authorization': `Bearer ${API_KEY}`
-    } : {}
-})
 
 // Public client for fetching doctors and categories (public endpoints that don't need a token)
 const publicClient = axios.create({
     baseURL: `${BASE_URL}/api`
 })
 
+// Only the relations doctor cards/details need — never the appointments relation
+const DOCTOR_POPULATE = 'populate[0]=image&populate[1]=categories';
+
 const getCategory = () => publicClient.get('/categories?populate=*');
 
-const getDoctorList = () => publicClient.get('/doctors?populate=*');
+const getDoctorList = () => publicClient.get('/doctors?' + DOCTOR_POPULATE);
 
-const getDoctorByCategory = (category) => publicClient.get('/doctors?filters[categories][Name][$in]=' + encodeURIComponent(category) + "&populate=*");
+const getDoctorByCategory = (category) => publicClient.get('/doctors?filters[categories][Name][$in]=' + encodeURIComponent(category) + '&' + DOCTOR_POPULATE);
 
-const getDoctorById = (id) => publicClient.get('/doctors/' + id + "?populate=*");
+const getDoctorById = (id) => publicClient.get('/doctors/' + id + '?' + DOCTOR_POPULATE);
 
-const bookAppointment = (data) => publicClient.post('/appointments', data);
+// Appointment operations go through our authenticated Next.js API routes
+const bookAppointment = (data) => axios.post('/api/appointments', data);
 
 const sendEmail = (data) => axios.post('/api/sendEmail', data);
 
-const getUserBookingList = (userEmail) => publicClient.get("/appointments?[filters][Email][$eq]=" + encodeURIComponent(userEmail) + "&populate[doctor][populate][image][populate][0]=url&populate=*");
+const getUserBookingList = () => axios.get('/api/appointments');
 
-const deleteBooking = (id) => publicClient.delete('/appointments/' + id);
+const deleteBooking = (id) => axios.delete('/api/appointments/' + id);
 
-const getBookedSlots = (doctorId, dateString) => publicClient.get(`/appointments?filters[doctor][id][$eq]=${doctorId}&filters[Date][$eq]=${dateString}`);
+const getBookedSlots = (doctorId, dateString) => axios.get('/api/booked-slots', { params: { doctorId, date: dateString } });
   
   export default{
     getCategory,
